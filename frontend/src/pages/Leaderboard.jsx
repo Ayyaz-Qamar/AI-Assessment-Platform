@@ -9,6 +9,9 @@ const CATEGORIES = [
   { value: 'CS', label: 'Computer Science' },
   { value: 'IT', label: 'IT' },
   { value: 'Cyber Security', label: 'Cyber Security' },
+  { value: 'Civil Engineering', label: 'Civil' },
+  { value: 'Electrical Engineering', label: 'Electrical' },
+  { value: 'Islamic Studies', label: 'Islamic Studies' },
 ]
 
 const rankStyle = (rank) => {

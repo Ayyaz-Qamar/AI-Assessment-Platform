@@ -1,8 +1,8 @@
 """
 Career mapping engine.
 
-Maps a user's per-category performance (avg score in AI, Data Science, CS, IT,
-Cyber Security) onto suggested careers using weighted skill profiles.
+Maps a user's per-category performance onto suggested careers using
+weighted skill profiles.
 
 Each career has a 'profile' dict: {category_name: weight (0..1)}.
 We score the career by:
@@ -19,6 +19,7 @@ from app.models import Test, TestAttempt
 # ---------- Career catalog ----------
 # Profile values 0-1 indicate how strongly each category contributes.
 CAREERS = [
+    # ---------- IT / Tech careers ----------
     {
         "code": "ml_engineer",
         "name": "Machine Learning Engineer",
@@ -119,6 +120,132 @@ CAREERS = [
         "skills_learn": ["React/Vue", "Backend frameworks", "Deployment"],
         "salary_range": "$60k–$130k",
     },
+
+    # ---------- Civil Engineering careers ----------
+    {
+        "code": "structural_engineer",
+        "name": "Structural Engineer",
+        "icon": "🏗️",
+        "tagline": "Design safe and durable buildings and infrastructure.",
+        "profile": {"Civil Engineering": 1.0, "Electrical Engineering": 0.1, "CS": 0.1, "IT": 0.0},
+        "skills_strong": ["Mechanics", "Structural analysis", "AutoCAD"],
+        "skills_learn": ["ETABS / SAP2000", "Seismic design", "BIM"],
+        "salary_range": "$60k–$120k",
+    },
+    {
+        "code": "construction_manager",
+        "name": "Construction Manager",
+        "icon": "🚧",
+        "tagline": "Lead construction projects from planning to delivery.",
+        "profile": {"Civil Engineering": 0.9, "IT": 0.2, "Electrical Engineering": 0.2},
+        "skills_strong": ["Project planning", "Cost estimation", "Site management"],
+        "skills_learn": ["MS Project / Primavera", "Contract law", "Quality control"],
+        "salary_range": "$65k–$130k",
+    },
+    {
+        "code": "urban_planner",
+        "name": "Urban Planner",
+        "icon": "🏛️",
+        "tagline": "Shape cities and communities for the future.",
+        "profile": {"Civil Engineering": 0.8, "Data Science": 0.3, "IT": 0.2},
+        "skills_strong": ["Land-use planning", "GIS", "Public policy"],
+        "skills_learn": ["Sustainability", "Transport planning", "Stakeholder engagement"],
+        "salary_range": "$55k–$100k",
+    },
+    {
+        "code": "transportation_engineer",
+        "name": "Transportation Engineer",
+        "icon": "🛣️",
+        "tagline": "Design roads, highways and transit systems.",
+        "profile": {"Civil Engineering": 0.9, "Data Science": 0.3, "Electrical Engineering": 0.2},
+        "skills_strong": ["Traffic analysis", "Highway design", "Surveying"],
+        "skills_learn": ["Smart transport systems", "Simulation tools", "Safety engineering"],
+        "salary_range": "$60k–$115k",
+    },
+
+    # ---------- Electrical Engineering careers ----------
+    {
+        "code": "power_engineer",
+        "name": "Power Systems Engineer",
+        "icon": "⚡",
+        "tagline": "Design and operate the electrical grids that power society.",
+        "profile": {"Electrical Engineering": 1.0, "CS": 0.2, "IT": 0.3, "Civil Engineering": 0.2},
+        "skills_strong": ["Circuit analysis", "Power generation", "Transmission"],
+        "skills_learn": ["Renewable integration", "MATLAB/Simulink", "Grid automation"],
+        "salary_range": "$70k–$140k",
+    },
+    {
+        "code": "embedded_engineer",
+        "name": "Embedded Systems Engineer",
+        "icon": "🔌",
+        "tagline": "Build smart hardware-software systems for IoT, automotive and more.",
+        "profile": {"Electrical Engineering": 0.9, "CS": 0.7, "IT": 0.3, "AI": 0.2},
+        "skills_strong": ["C / C++", "Microcontrollers", "Digital logic"],
+        "skills_learn": ["RTOS", "PCB design", "ARM Cortex"],
+        "salary_range": "$70k–$140k",
+    },
+    {
+        "code": "robotics_engineer",
+        "name": "Robotics Engineer",
+        "icon": "🤖",
+        "tagline": "Build intelligent machines that perceive and act.",
+        "profile": {"Electrical Engineering": 0.8, "CS": 0.6, "AI": 0.7, "Civil Engineering": 0.1},
+        "skills_strong": ["Control systems", "Sensors", "Programming"],
+        "skills_learn": ["ROS", "Computer Vision", "Path planning"],
+        "salary_range": "$80k–$160k",
+    },
+    {
+        "code": "electronics_engineer",
+        "name": "Electronics Engineer",
+        "icon": "🔋",
+        "tagline": "Design the circuits behind every modern device.",
+        "profile": {"Electrical Engineering": 1.0, "CS": 0.3, "IT": 0.2},
+        "skills_strong": ["Analog/Digital circuits", "Schematic design", "Signal processing"],
+        "skills_learn": ["VLSI", "FPGA", "EMC/EMI"],
+        "salary_range": "$65k–$130k",
+    },
+
+    # ---------- Islamic Studies careers ----------
+    {
+        "code": "islamic_scholar",
+        "name": "Islamic Scholar / Researcher",
+        "icon": "📚",
+        "tagline": "Study, interpret and contribute to Islamic knowledge.",
+        "profile": {"Islamic Studies": 1.0, "Data Science": 0.1, "CS": 0.0},
+        "skills_strong": ["Quran & Hadith", "Arabic", "Critical thinking"],
+        "skills_learn": ["Comparative religion", "Modern Tafsir", "Academic writing"],
+        "salary_range": "$40k–$90k",
+    },
+    {
+        "code": "islamic_educator",
+        "name": "Islamic Studies Educator",
+        "icon": "🕌",
+        "tagline": "Teach Islamic principles and inspire the next generation.",
+        "profile": {"Islamic Studies": 0.95, "Data Science": 0.0, "CS": 0.0},
+        "skills_strong": ["Quran recitation", "Pedagogy", "Communication"],
+        "skills_learn": ["Curriculum design", "Online teaching", "Youth engagement"],
+        "salary_range": "$35k–$80k",
+    },
+    {
+        "code": "islamic_content_writer",
+        "name": "Islamic Content Writer",
+        "icon": "✍️",
+        "tagline": "Communicate Islamic ideas to a wider audience.",
+        "profile": {"Islamic Studies": 0.9, "IT": 0.2, "Data Science": 0.1},
+        "skills_strong": ["Writing", "Research", "Arabic / Quranic knowledge"],
+        "skills_learn": ["SEO", "Social media", "Editing"],
+        "salary_range": "$35k–$75k",
+    },
+    {
+        "code": "shariah_advisor",
+        "name": "Shariah Advisor / Islamic Finance",
+        "icon": "💼",
+        "tagline": "Advise institutions on Shariah-compliant operations and finance.",
+        "profile": {"Islamic Studies": 0.9, "Data Science": 0.3, "CS": 0.1},
+        "skills_strong": ["Fiqh of transactions", "Islamic law", "Analysis"],
+        "skills_learn": ["Islamic banking", "Audit", "Regulatory frameworks"],
+        "salary_range": "$60k–$150k",
+    },
 ]
 
 
@@ -166,20 +293,16 @@ def compute_career_matches(db: Session, user_id: int, top_n: int = 5) -> dict:
         for cat, weight in profile.items():
             user_avg = cat_scores.get(cat)
             if user_avg is None:
-                # Missing category for this user — treat as 0 for fairness
                 continue
             score_sum += weight * user_avg
             contributing_cats.append((cat, weight, user_avg))
 
-        # Use the user's actual category weight sum so unattempted categories
-        # don't artificially shrink the match — only judge on what we know.
         actual_weight_sum = sum(w for _, w, _ in contributing_cats)
         if actual_weight_sum <= 0:
             continue
 
         match_pct = score_sum / actual_weight_sum
 
-        # Tier label
         if match_pct >= 85:
             tier = "Excellent Match"
         elif match_pct >= 70:
@@ -204,7 +327,6 @@ def compute_career_matches(db: Session, user_id: int, top_n: int = 5) -> dict:
     results.sort(key=lambda r: r["match_pct"], reverse=True)
     top = results[:top_n]
 
-    # Identify user's strongest and weakest categories for narrative
     sorted_cats = sorted(cat_scores.items(), key=lambda x: x[1], reverse=True)
     strongest = sorted_cats[0] if sorted_cats else None
     weakest = sorted_cats[-1] if len(sorted_cats) > 1 else None
