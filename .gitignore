@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+venv/
+.env
+.venv/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# ML artifacts
+backend/app/ml/model.joblib
+backend/app/ml/dataset.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+ 
+# Personal files 
+_personal-backup/ 
+*.pdf 
+Commands.txt 
+information.txt 
+ 
+# Personal files 
+_personal-backup/ 
+*.pdf 
+Commands.txt 
+information.txt 
+ 
