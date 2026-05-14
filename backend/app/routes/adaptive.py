@@ -14,8 +14,10 @@ from app.utils.auth import get_current_user
 
 router = APIRouter(prefix="/api/adaptive", tags=["Adaptive Test"])
 
-MAX_QUESTIONS_PER_ATTEMPT = 10
-TIME_PER_QUESTION_SEC = 30  # client-side timer; server is informational
+# ---- Test sizing ----
+MAX_QUESTIONS_PER_ATTEMPT = 30      # was 10
+TIME_PER_QUESTION_SEC = 90          # per-question timer (was 30)
+TOTAL_TEST_TIME_SEC = 45 * 60       # 45-minute overall cap
 
 
 @router.post("/start")
@@ -52,6 +54,7 @@ def start_attempt(
         "total_questions": total_q,
         "max_questions": min(MAX_QUESTIONS_PER_ATTEMPT, total_q),
         "time_per_question": TIME_PER_QUESTION_SEC,
+        "total_time_seconds": TOTAL_TEST_TIME_SEC,
         "question": QuestionOut.model_validate(first_q) if first_q else None,
     }
 
@@ -81,7 +84,7 @@ def submit_answer(
     if question.test_id != attempt.test_id:
         raise HTTPException(status_code=400, detail="Question doesn't belong to this test")
 
-    # Timeout handling: if no option provided OR timed_out flag set → auto-wrong
+    # Timeout handling: if no option provided OR timed_out flag set -> auto-wrong
     if payload.selected_option and not payload.timed_out:
         selected = payload.selected_option.upper()
         is_correct = selected == question.correct_option.upper()
@@ -101,7 +104,7 @@ def submit_answer(
     ))
     db.commit()
 
-    # Adaptive: timed-out behaves like wrong → easier next
+    # Adaptive: timed-out behaves like wrong -> easier next
     next_difficulty = AdaptiveEngine.get_next_difficulty(
         question.difficulty.value, is_correct
     )
@@ -111,6 +114,11 @@ def submit_answer(
     )
     total_q = db.query(Question).filter(Question.test_id == attempt.test_id).count()
     cap = min(MAX_QUESTIONS_PER_ATTEMPT, total_q)
+
+    # ---- Overall 45-min cap: if exceeded, finish the attempt early ----
+    elapsed = (datetime.utcnow() - attempt.started_at).total_seconds()
+    if elapsed >= TOTAL_TEST_TIME_SEC:
+        return _finalize_attempt(db, attempt, current_user.id)
 
     if answered_count >= cap:
         return _finalize_attempt(db, attempt, current_user.id)

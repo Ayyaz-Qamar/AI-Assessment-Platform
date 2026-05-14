@@ -8,7 +8,6 @@ export default function Register() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [role, setRole] = useState('student')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -17,7 +16,8 @@ export default function Register() {
     setError('')
     setLoading(true)
     try {
-      await register(name, email, password, role)
+      // role is always 'student' for public sign-ups (backend enforces this too)
+      await register(name, email, password, 'student')
       // auto-login after register
       await login(email, password)
       navigate('/dashboard')
@@ -39,7 +39,7 @@ export default function Register() {
               Create Account
             </h1>
             <p className="text-slate-500 dark:text-slate-400 mt-2">
-              Join AssessAI today
+              Join AssessAI as a student today
             </p>
           </div>
 
@@ -93,26 +93,12 @@ export default function Register() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                Role
-              </label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
-              >
-                <option value="student">Student</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
-
             <button
               type="submit"
               disabled={loading}
               className="w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:opacity-90 disabled:opacity-50 transition shadow-md"
             >
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? 'Creating account...' : 'Create Student Account'}
             </button>
           </form>
 

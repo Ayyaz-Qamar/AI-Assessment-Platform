@@ -13,15 +13,17 @@ router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 @router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED)
 def register(payload: UserCreate, db: Session = Depends(get_db)):
+    """Public registration. Any `role` in the body is IGNORED — every public
+    sign-up is forced to `student`. Admins must be promoted manually in the DB
+    (or seeded on startup via ADMIN_EMAIL/ADMIN_PASSWORD env vars)."""
     if db.query(User).filter(User.email == payload.email).first():
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    role = RoleEnum(payload.role.value) if payload.role else RoleEnum.student
     user = User(
         name=payload.name,
         email=payload.email,
         password_hash=hash_password(payload.password),
-        role=role,
+        role=RoleEnum.student,  # forced - public cannot self-register as admin
     )
     db.add(user)
     db.commit()
